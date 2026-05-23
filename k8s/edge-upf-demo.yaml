@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-upf
+  namespace: edge-upf
+  labels:
+    app: edge-upf
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: edge-upf
+  template:
+    metadata:
+      labels:
+        app: edge-upf
+    spec:
+      containers:
+      - name: edge-upf
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
