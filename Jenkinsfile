@@ -29,6 +29,12 @@ pipeline {
         stage('Self-Healing Check') {
             steps {
                 sh 'kubectl rollout status deployment/edge-upf -n edge-upf'
+		sh '''
+		kubectl delete pod -n edge-upf -l app=edge-upf || true
+                sleep 10
+                kubectl get pods -n edge-upf
+		'''
+
             }
         }
     }
